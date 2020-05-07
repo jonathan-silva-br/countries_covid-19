@@ -8,11 +8,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.BaseMenuPresenter;
 
 import com.example.treinamento.presenter.BasePresenter;
+import com.example.treinamento.view.adapter.AbstractAdapter;
 
 import butterknife.ButterKnife;
 
 
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity {
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView {
 
     protected P presenter;
 
@@ -33,5 +34,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     abstract P getPresenter();
 
+    @Override
+    public <A extends AbstractAdapter> void setAdapter(A adapter) {
 
+    }
 }

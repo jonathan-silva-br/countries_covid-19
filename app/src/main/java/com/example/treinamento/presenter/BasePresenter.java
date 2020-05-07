@@ -7,8 +7,10 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.example.treinamento.view.BaseView;
 
-public abstract class BasePresenter<V> {
+
+public abstract class BasePresenter<V extends BaseView> {
 
     protected V view;
 

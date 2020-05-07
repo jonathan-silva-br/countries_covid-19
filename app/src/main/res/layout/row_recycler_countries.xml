@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="10dp"
+    android:paddingTop="10dp"
+    android:paddingEnd="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/row_recyclerView_countries_textview_country"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Brazil"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/row_recyclerView_countries_iso2"
+        app:layout_constraintStart_toEndOf="@id/row_recyclerView_countries_textview_country"
+        app:layout_constraintTop_toTopOf="@+id/row_recyclerView_countries_textview_country"
+        android:text="BR"
+        android:layout_marginStart="5dp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <view
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toBottomOf="@id/row_recyclerView_countries_textview_country"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="#adadad"
+        android:layout_width="0dp"
+        android:layout_height="1dp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
