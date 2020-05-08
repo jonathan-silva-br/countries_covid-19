@@ -1,15 +1,21 @@
 package com.example.treinamento.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Country {
 
+    @SerializedName("Country")
     private String name;
 
+    @SerializedName("Slug")
     private String slug;
 
+    @SerializedName("ISO2")
     private String iso2;
 
-    public Country(String name, String iso2){
+    public Country(String name, String slug, String iso2){
         this.setName(name);
+        this.setSlug(slug);
         this.setIso2(iso2);
     }
 
