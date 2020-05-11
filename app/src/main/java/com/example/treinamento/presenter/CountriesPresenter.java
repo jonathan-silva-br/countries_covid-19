@@ -1,67 +1,54 @@
 package com.example.treinamento.presenter;
 
 import android.content.Context;
-
+import android.widget.Toast;
 import com.example.treinamento.model.Country;
-import com.example.treinamento.model.dao.CountryDao;
-import com.example.treinamento.retrofit.CountryService;
-import com.example.treinamento.retrofit.RetrofitConfig;
+import com.example.treinamento.rules.CountryRules;
+import com.example.treinamento.utils.Util;
 import com.example.treinamento.view.CountriesActivityView;
 import com.example.treinamento.view.adapter.CountriesAdapter;
-
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
 
-public class CountriesPresenter extends BasePresenter<CountriesActivityView> {
-
+public class CountriesPresenter extends BasePresenter<CountriesActivityView, CountryRules> implements Callback<List<Country>> {
 
     public CountriesPresenter(CountriesActivityView view) {
-        super(view);
+        super(view, new CountryRules((Context)view));
     }
 
     @Override
     public void onViewReady() {
-        List<Country> countries = loadAllCountries();
-        CountriesAdapter adapter = new CountriesAdapter(countries);
-        view.setAdapter(adapter);
-
-        CountryService service = new RetrofitConfig().getRetrofit().create(CountryService.class);
-
-        Call<List<Country>> call = service.getInfectedCountries();
-        call.enqueue(new Callback<List<Country>>() {
-            @Override
-            public void onResponse(Call<List<Country>> call, Response<List<Country>> response) {
-
-                if(response.raw().code() == HttpURLConnection.HTTP_OK && response.body() != null){
-                    CountryDao countryDao = new CountryDao((Context) view);
-                    countryDao.insertIfNotExists(response.body());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<List<Country>> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
-
-
-
+        if (Util.isOnline((Context) view)){
+            view.showLoading();
+            rules.getCountries(this);
+        }else{
+            loadCountries();
+        }
     }
 
-    private List<Country> loadAllCountries() {
-        List<Country> countries = new ArrayList<>();
-        countries.add(new Country("Brazil", "brazil", "BR"));
-        countries.add(new Country("Canada", "canada", "CA"));
-        countries.add(new Country("Qatar", "qtar", "QA"));
-        countries.add(new Country("India", "india", "IN"));
-        countries.add(new Country("Sudan", "sudan", "SD"));
-        countries.add(new Country("Madasgascar", "madagascar", "MG"));
-        return countries;
+    private void loadCountries(){
+        List<Country> countries = rules.loadAll();
+        CountriesAdapter adapter = new CountriesAdapter(countries);
+        view.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResponse(Call<List<Country>> call, Response<List<Country>> response) {
+        view.hideLoading();
+
+        if(response.raw().code() == HttpURLConnection.HTTP_OK && response.body() != null){
+            rules.insertIfNotExists(response.body());
+            loadCountries();
+        }else{
+            Toast.makeText((Context) view, "Falha ao atualizar informações", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    @Override
+    public void onFailure(Call<List<Country>> call, Throwable t) {
+        Toast.makeText((Context) view, "Falha ao atualizar informações", Toast.LENGTH_LONG).show();
     }
 }

@@ -1,21 +1,17 @@
 package com.example.treinamento.presenter;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.text.InputFilter;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-
+import com.example.treinamento.rules.BaseRules;
 import com.example.treinamento.view.BaseView;
 
 
-public abstract class BasePresenter<V extends BaseView> {
+public abstract class BasePresenter<V extends BaseView, R extends BaseRules> {
 
     protected V view;
+    protected R rules;
 
-    public BasePresenter(V view) {
+    public BasePresenter(V view, R rules) {
         this.view = view;
+        this.rules = rules;
     }
 
     public abstract void onViewReady();

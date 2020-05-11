@@ -3,10 +3,9 @@ package com.example.treinamento.model.dao;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-
 import com.example.treinamento.model.Country;
 import com.example.treinamento.model.database.TreinamentoDbHelper;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class CountryDao {
@@ -73,10 +72,40 @@ public class CountryDao {
                 cursor.close();
             }
         }
+    }
 
+    public List<Country> loadAll(){
+        List<Country> countries = new ArrayList<>();
+        String[] columns = new String[]{COLUMN_NAME_NAME, COLUMN_NAME_SLUG, COLUMN_NAME_ISO2};
+        String orderBy = COLUMN_NAME_NAME + " ASC";
+        Cursor cursor = null;
+        try {
+            cursor = treinamentoDbHelper.getReadableDatabase().query(TABLE_NAME, columns, null, null, null, null, orderBy);
 
+            while(cursor.moveToNext()){
+                int index = 0;
+
+                Country country = new Country();
+                country.setName(cursor.getString(index++));
+                country.setSlug(cursor.getString(index++));
+                country.setIso2(cursor.getString(index++));
+
+                countries.add(country);
+            }
+
+            return countries;
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            if(cursor != null){
+                cursor.close();
+            }
+        }
+        return countries;
 
     }
+
 
 
 }
